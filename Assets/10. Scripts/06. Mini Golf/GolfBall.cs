@@ -3,30 +3,56 @@ using UnityEngine;
 
 namespace Study3D.MiniGolf
 {
-    // 방향과 힘을 받아서 움직이고, 현재 공이 운동을 하는지 안하는지 알려주는 공
-    
+    public enum GolfBallVisual
+    {
+        Ready,    // 발사 준비 완료
+        Hover,    // 호버 중 / 드래그 중
+        Disabled, // 쏠 수 없음
+        Unexpected,
+    }
+
     public class GolfBall : MonoBehaviour
     {
-        [Header("Settings")] 
-        public float stopSpeed = 0.1f;
-        public float stopDelay = 0.3f;
+        private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
+
+        [Header("Settings")]
+        [SerializeField] private float stopSpeed = 0.1f;
+        [SerializeField] private float stopDelay = 0.3f;
         // 공을 다이나믹으로 사용하기 때문에 게임적 표현을
         // 회전 스피드에 제한을 활용하여 간접적으로 제어 합니다.
-        public float maxAngularSpeed = 150f;
+        [SerializeField] private float maxAngularSpeed = 150f;
+
+        [Header("Colors")]
+        [SerializeField] private Color readyColor = Color.white;
+        [SerializeField] private Color hoverColor = Color.green;
+        [SerializeField] private Color disabledColor = Color.crimson;
+        [SerializeField] private Color UnexpectedColor = Color.gold;
+
+        [Header("Ref")]
+        [SerializeField] private Renderer ballRenderer;
 
         private Rigidbody rBody;
+        private SphereCollider sphere;
+        private Material mat;
         private Vector3 lastPosition; // 유저가 마지막으로 공을 건드린 위치
         private Vector3 shotVelocity; // 공의 방향 * 세기가 연산되는 변수
         private bool shotRequested;
         private float slowTime;
 
         public bool IsStopped => (shotRequested == false) && slowTime >= stopDelay;
-        
+
+        // 공의 월드 반지름
+        public float Radius => sphere.radius * transform.lossyScale.x;
+
         private void Awake()
         {
             rBody = GetComponent<Rigidbody>();
+            sphere = GetComponent<SphereCollider>();
             rBody.maxAngularVelocity = maxAngularSpeed;
             lastPosition = transform.position;
+
+            mat = ballRenderer.material;
+            SetVisual(GolfBallVisual.Ready);
         }
 
         // 공의 물리를 사용할 예정이라 Update가 아닌 FixedUpdate를 사용합니다.
@@ -36,6 +62,8 @@ namespace Study3D.MiniGolf
             {
                 shotRequested = false;
                 rBody.AddForce(shotVelocity, ForceMode.VelocityChange);
+
+                slowTime = 0.0f;
                 return;
             }
 
@@ -46,11 +74,26 @@ namespace Study3D.MiniGolf
         }
 
         // 외부에서 Shoot함수를 호출하여 동작하도록 함수를 public으로 선언합니다
-        public void Shoot(Vector3 direction, float power)
+        public void Shoot(Vector3 direction, float power, bool isPassive = false)
         {
             shotRequested = true;
             shotVelocity = direction * power;
-            lastPosition = transform.position;
+
+            if (isPassive == false)
+                lastPosition = transform.position;
+        }
+
+        public void SetVisual(GolfBallVisual visual)
+        {
+            Color color = visual switch
+            {
+                GolfBallVisual.Ready    => readyColor,
+                GolfBallVisual.Hover    => hoverColor,
+                GolfBallVisual.Disabled => disabledColor,
+                _ => UnexpectedColor
+            };
+
+            mat.SetColor(BaseColor, color);
         }
 
         // 공을 position의 위치로 옮기고
@@ -71,7 +114,7 @@ namespace Study3D.MiniGolf
         }
 
         // public으로 선언해서 외부에서 호출 할 수 있도록 해줍니다.
-        public void ReturnToLasShotPosition()
+        public void ReturnToLastShotPosition()
         {
             Teleport(lastPosition);
         }

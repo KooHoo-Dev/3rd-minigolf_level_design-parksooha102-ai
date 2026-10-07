@@ -14,7 +14,7 @@ namespace Study3D.MiniGolf
         {
             if (SimpleInput.GetKeyDown(Key.Digit1))
             {
-                ball.ReturnToLasShotPosition();
+                ball.ReturnToLastShotPosition();
             }
             if (SimpleInput.GetKeyDown(Key.Digit2))
             {
