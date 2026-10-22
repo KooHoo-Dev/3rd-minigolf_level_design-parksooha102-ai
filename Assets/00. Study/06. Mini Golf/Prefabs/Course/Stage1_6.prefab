@@ -324,6 +324,14 @@ PrefabInstance:
       propertyPath: boostPower
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 3137267891859551309, guid: 4e8b11c9df51c724d8d5930dd50cd686, type: 3}
+      propertyPath: boostDirection.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3137267891859551309, guid: 4e8b11c9df51c724d8d5930dd50cd686, type: 3}
+      propertyPath: boostDirection.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3328224116319319714, guid: 4e8b11c9df51c724d8d5930dd50cd686, type: 3}
       propertyPath: m_Name
       value: BoostPad_1
@@ -984,8 +992,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 932078799925427043, guid: 6585c829f9e7f0c47b06b0a0abd674f7, type: 3}
       propertyPath: goalPosition.x
-      value: 1.6
+      value: -1.6
       objectReference: {fileID: 0}
+    - target: {fileID: 2583160160137705753, guid: 6585c829f9e7f0c47b06b0a0abd674f7, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6af7e014b41c2a948a00519f01adb8bd, type: 2}
     - target: {fileID: 3337301735314157447, guid: 6585c829f9e7f0c47b06b0a0abd674f7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2329,6 +2341,10 @@ PrefabInstance:
       propertyPath: goalPosition.x
       value: 1.6
       objectReference: {fileID: 0}
+    - target: {fileID: 2583160160137705753, guid: 6585c829f9e7f0c47b06b0a0abd674f7, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6af7e014b41c2a948a00519f01adb8bd, type: 2}
     - target: {fileID: 3337301735314157447, guid: 6585c829f9e7f0c47b06b0a0abd674f7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

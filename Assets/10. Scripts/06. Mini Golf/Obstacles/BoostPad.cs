@@ -12,7 +12,9 @@ namespace Study3D.MiniGolf
         {
             if (other.TryGetComponent<GolfBall>(out var ball))
             {
-                ball.Shoot(boostDirection, boostPower, true);
+                Vector3 worldDirection = transform.TransformDirection(boostDirection);
+
+                ball.Shoot(worldDirection, boostPower, true);
             }
         }
     }
